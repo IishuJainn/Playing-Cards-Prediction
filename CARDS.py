@@ -1,4 +1,4 @@
-#IMPORTING REQUIRED PAKAGES
+# IMPORTING REQUIRED PAKAGES
 import tensorflow as tf
 from keras.models import Sequential
 from tensorflow.keras import layers
@@ -55,7 +55,7 @@ model = tf.keras.Sequential([
     layers.Dropout(.2),
     layers.Flatten(),
     layers.Dense(128,activation='relu'),
-    layers.Dense(num_classes)
+    layers.Dense(num_classes,activation='softmax')
 ])
 
 # COMPILING THE MODEL
@@ -63,13 +63,13 @@ model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 print(model.summary())
-history =model.fit(Train_ds,validation_data=Valid_ds,epochs=16)
+history =model.fit(Train_ds,validation_data=Valid_ds,epochs=10)
 acc=history.history['accuracy']
 val_acc=history.history['val_accuracy']
 loss=history.history['loss']
 val_loss=history.history['val_loss']
 print(acc,val_acc,loss,val_loss)
-epochs_range = range(16)
+epochs_range = range(10)
 plt.figure(figsize=(8, 8))
 plt.subplot(1, 2, 1)
 plt.plot(epochs_range, acc, label='Training Accuracy')
@@ -86,3 +86,11 @@ plt.show()
 # /kaggle/input/cards-image-datasetclassification/train
 # /kaggle/input/cards-image-datasetclassification/valid
 # /kaggle/input/cards-image-datasetclassification/test
+
+# import pickle
+# pickle.dump(SS,open('scalar.pkl','wb'))
+# ssc=pickle.load(open('scalar.pkl','rb'))
+from keras.models import load_model
+model.save('model.h5')
+model_final = load_model('model.h5')
+
